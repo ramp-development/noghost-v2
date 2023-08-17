@@ -1,18 +1,19 @@
 import { SplitText } from 'gsap/SplitText';
-import { browser } from './broswer';
 
 export const splitLines = (element: Element | Element[], timeline: GSAPTimeline, delay: string) => {
-  const formatted = new SplitText(element, { type: 'lines' });
-  formatted.lines.forEach((line) => line.classList.add('split-mask'));
+  const formatted = new SplitText(element, {
+    type: 'lines, words',
+    linesClass: 'u-overflow-hidden',
+  });
 
-  timeline.from(
-    formatted.lines,
-    {
-      opacity: 0,
-      rotationX: browser() ? -95 : 0,
-      translateY: '100%',
-      stagger: 0.1,
-    },
-    delay
-  );
+  formatted.lines.forEach((line, index) => {
+    timeline.from(
+      line.children,
+      {
+        translateY: '100%',
+        stagger: 0,
+      },
+      index === 0 ? delay : '<0.2'
+    );
+  });
 };

@@ -1,70 +1,170 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { queryElement } from '$utils/queryElement';
+import { queryElements } from '$utils/queryElements';
+
 import * as utils from './utils';
-import { browser } from './utils/broswer';
+// import { browser } from './utils/broswer';
 
 export const groups = () => {
-  const groups = [...document.querySelectorAll('[data-animation-element="group"]')];
+  console.log('groups');
+  const defaults = { duration: 1, ease: 'power2.out', stagger: 0.1 };
+  const start = 'top 60%';
+  const onload = (self: ScrollTriggerInstance) => self.progress === 1 && self.animation.progress(1);
+  const onRefresh = (self: ScrollTriggerInstance) =>
+    self.progress === 1 && self.animation.progress(1);
 
-  const mm = gsap.matchMedia();
-  mm.add('(min-width: 768px)', () => {
-    groups.forEach((group) => {
-      // get the trigger and cancel if custom
-      const trigger = group.dataset.animationTrigger;
-      if (trigger === 'custom') return;
+  const attr = 'data-animation-element';
+  const groups = queryElements<HTMLDivElement>(`[${attr}="group"]`);
+  // const logomarks = queryElements<HTMLDivElement>('[data-animation-element="logomark"]');
+  // const titles = queryElements<HTMLHeadingElement>('[data-animation-element="title"]');
+  // const paragraphs = queryElements<HTMLParagraphElement>('[data-animation-element="paragraph"]');
+  // const cards = queryElements<HTMLDivElement>('[data-animation-element="card"]');
+  // const buttonGroups = queryElements<HTMLDivElement>('[data-animation-element="button-group"]');
+  // const lists = queryElements<HTMLOListElement | HTMLUListElement>(
+  //   '[data-animation-element="list"]'
+  // );
 
-      // reference to elements
-      const iconWrapper = group.querySelector('[data-animation-element="icon-wrapper"]');
-      const heading = group.querySelector('[data-animation-element="heading"]');
-      const sub = group.querySelectorAll('[data-animation-element="sub"]');
-      const features = group.querySelector('[data-animation-element="features"]');
-      const images = group.querySelector('[data-animation-element="images"]');
-      const lists = group.querySelectorAll('[data-animation-element="list"]');
-      const buttonGroups = [...group.querySelectorAll('[data-animation-element="button-group"]')];
-      const content = group.querySelector('[data-animation-element="content"]');
+  // logomarks.forEach((logomark) => {
+  //   const timeline = gsap.timeline({
+  //     defaults,
+  //     scrollTrigger: {
+  //       trigger: logomark,
+  //       start,
+  //       onload,
+  //       onRefresh,
+  //     },
+  //   });
 
-      const timeline = gsap.timeline({
-        defaults: {
-          duration: 1,
-          ease: 'power2.out',
-          stagger: 0.01,
-          force3D: browser(),
-        },
-        scrollTrigger: {
-          trigger: group,
-          start: 'top 80%',
-          onload: (self) => self.progress === 1 && self.animation.progress(1),
-          onRefresh: (self) => self.progress === 1 && self.animation.progress(1),
-        },
-      });
+  //   utils.slideUp(logomark.firstElementChild, timeline, '0');
+  // });
 
-      if (iconWrapper) utils.icons(iconWrapper, timeline, '0');
-      if (heading) utils.splitChars(heading, timeline, '0');
-      if (sub) utils.splitLines(sub, timeline, '<0.25');
-      if (features) utils.features(features, timeline, '<0.1');
-      if (content) utils.fadeUp(content, timeline, '<0.1');
-      if (lists.length !== 0) lists.forEach((list) => utils.fadeUpChildren(list, timeline, '<0.1'));
-      if (images) utils.slideUpChildren(images, timeline, '0');
+  // titles.forEach((title) => {
+  //   const timeline = gsap.timeline({
+  //     defaults,
+  //     scrollTrigger: {
+  //       trigger: title,
+  //       start,
+  //       onload,
+  //       onRefresh,
+  //     },
+  //   });
 
-      if (buttonGroups.length === 1) utils.buttons(buttonGroups[0], timeline, '<0.25');
-      if (buttonGroups.length > 1) {
-        buttonGroups.forEach((buttonGroup, index) => {
-          if (index === 0) return;
-          utils.buttons(buttonGroup, timeline, '<0.1');
-        });
-      }
+  //   utils.splitLines(title, timeline, '0');
+  // });
 
-      if (trigger) {
-        const timeout = trigger === 'instant' ? 0 : parseFloat(trigger);
-        setTimeout(() => {
-          timeline.play();
-        }, timeout);
-      }
+  // paragraphs.forEach((paragraph) => {
+  //   const timeline = gsap.timeline({
+  //     defaults,
+  //     scrollTrigger: {
+  //       trigger: paragraph,
+  //       start,
+  //       onload,
+  //       onRefresh,
+  //     },
+  //   });
 
-      document.addEventListener('refreshScrollTrigger', () => {
-        timeline.scrollTrigger.refresh();
-      });
+  //   utils.splitLines(paragraph, timeline, '0.5');
+  // });
+
+  // cards.forEach((card) => {
+  //   const timeline = gsap.timeline({
+  //     defaults,
+  //     scrollTrigger: {
+  //       trigger: card,
+  //       start,
+  //       onload,
+  //       onRefresh,
+  //     },
+  //   });
+
+  //   utils.fadeUp(card, timeline, '0');
+  // });
+
+  // buttonGroups.forEach((buttonGroup) => {
+  //   const timeline = gsap.timeline({
+  //     defaults,
+  //     scrollTrigger: {
+  //       trigger: buttonGroup,
+  //       start,
+  //       onload,
+  //       onRefresh,
+  //     },
+  //   });
+
+  //   utils.buttons(buttonGroup, timeline, '1');
+  // });
+
+  // lists.forEach((list) => {
+  //   const timeline = gsap.timeline({
+  //     defaults,
+  //     scrollTrigger: {
+  //       trigger: list,
+  //       start,
+  //       onload,
+  //       onRefresh,
+  //     },
+  //   });
+
+  //   [...list.children].forEach((child, index) => {
+  //     child.classList.add('u-overflow-hidden');
+  //     utils.slideUp(child.firstElementChild, timeline, index === 0 ? '0' : '<0.1');
+  //   });
+
+  //   // utils.(list, timeline, '1');
+  // });
+
+  groups.forEach((group) => {
+    // // get the trigger and cancel if custom
+    // const trigger = group.dataset.animationTrigger;
+    // if (trigger === 'custom') return;
+
+    // reference to elements
+    const logomark = queryElement<HTMLDivElement>(`[${attr}="logomark"]`, group);
+    const title = queryElement<HTMLHeadingElement>(`[${attr}="title"]`, group);
+    const paragraph = queryElement<HTMLParagraphElement>(`[${attr}="paragraph"]`, group);
+    const cards = queryElements<HTMLDivElement>(`[${attr}="card"]`, group);
+    const buttonGroup = queryElement<HTMLDivElement>(`[${attr}="button-group"]`, group);
+    const list = queryElement<HTMLOListElement | HTMLUListElement>(`[${attr}="list"]`, group);
+
+    const timeline = gsap.timeline({
+      defaults,
+      scrollTrigger: {
+        trigger: group,
+        start,
+        onload,
+        onRefresh,
+      },
     });
+
+    if (logomark) utils.slideUp(logomark.firstElementChild, timeline, '0');
+    if (title) utils.splitLines(title, timeline, '0');
+    if (paragraph) utils.splitLines(paragraph, timeline, '<0.25');
+    if (cards) utils.fadeUp(cards, timeline, '<0.25');
+    if (buttonGroup) utils.buttons(buttonGroup, timeline, '<0.25');
+    if (list) {
+      [...list.children].forEach((child, index) => {
+        child.classList.add('u-overflow-hidden');
+        utils.slideUp(child.firstElementChild, timeline, index === 0 ? '0' : '<0.1');
+      });
+    }
+
+    // if (trigger) {
+    //   const timeout = trigger === 'instant' ? 0 : parseFloat(trigger);
+    //   setTimeout(() => {
+    //     timeline.play();
+    //   }, timeout);
+    // }
+
+    // document.addEventListener('refreshScrollTrigger', () => {
+    //   timeline.scrollTrigger.refresh();
+    // });
   });
+
+  // const groups = [...document.querySelectorAll('[data-animation-element="group"]')];
+
+  // const mm = gsap.matchMedia();
+  // mm.add('(min-width: 768px)', () => {
+  // });
 };
