@@ -135,6 +135,10 @@ export const groups = () => {
         start,
         onload,
         onRefresh,
+        onEnter: () => {
+          console.log('enter');
+          console.log(group);
+        },
       },
     });
 
