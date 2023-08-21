@@ -1,28 +1,14 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { queryElement } from '$utils/queryElement';
 
 export const nav = () => {
-  const navPos = document.querySelector('.nav_pos');
-  if (!navPos) return;
-  const navComponent = navPos.querySelector('.nav_component');
-  if (!navComponent) return;
-  const navBanner = navPos.querySelector('.nav_banner');
+  console.log('nav');
+  const scrollClass = 'cc-scroll';
+  const nav = queryElement<HTMLDivElement>('.nav_component');
+  if (!nav) return;
 
-  // define gsap timeline
-  const timeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: document.body,
-      start: `top -${window.innerHeight}`,
-      onEnter: () => timeline.play(),
-      onLeaveBack: () => timeline.reverse(),
-    },
-    paused: true,
-    onStart: () => navComponent.classList.add('is-scrolled'),
-    onReverseComplete: () => navComponent.classList.remove('is-scrolled'),
+  if (window.scrollY >= 128) nav.classList.add(scrollClass);
+  window.addEventListener('scroll', () => {
+    if (window.scrollY >= 128) nav.classList.add(scrollClass);
+    if (window.scrollY < 128) nav.classList.remove(scrollClass);
   });
-
-  timeline
-    .set(navBanner, { display: 'none' })
-    .set(navPos, { position: 'fixed', translateY: '-100%', duration: 0 })
-    .to(navPos, { translateY: 0, duration: 0.5, ease: 'power2.out' });
 };
