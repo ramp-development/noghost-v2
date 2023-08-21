@@ -9,6 +9,7 @@ export const nav = () => {
   if (!nav) return;
 
   // get references to necessary elements
+  const mouse = queryElement<HTMLDivElement>('.mouse');
   const navMenuButton = queryElement<HTMLDivElement>('.nav_menu-btn', nav);
   const navLinksWrap = queryElement<HTMLDivElement>('.nav_links', nav);
   const navLinks = queryElements<HTMLAnchorElement>('.nav_link', nav);
@@ -26,6 +27,7 @@ export const nav = () => {
   // handle the flip on nav link hover in
   navLinks.forEach((navLink) => {
     navLink.addEventListener('mouseenter', () => {
+      if (mouse) mouse.style.mixBlendMode = 'difference';
       const state = Flip.getState(navLinkBG);
       navLink.prepend(navLinkBG);
       Flip.from(state, {
@@ -37,6 +39,7 @@ export const nav = () => {
 
   // reset the flip on hover out of all links
   navLinksWrap.addEventListener('mouseleave', () => {
+    if (mouse) mouse.style.removeProperty('mix-blend-mode');
     activeLink = getActiveLink(navLinks);
     if (!activeLink) return;
 
