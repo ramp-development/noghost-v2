@@ -1,5 +1,5 @@
-import { nav } from './nav';
+import { sliders } from './sliders';
 
 export const initComponents = () => {
-  nav();
+  sliders();
 };

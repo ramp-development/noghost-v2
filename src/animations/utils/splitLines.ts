@@ -1,8 +1,13 @@
 import { SplitText } from 'gsap/SplitText';
 
-export const splitLines = (element: Element | Element[], timeline: GSAPTimeline, delay: string) => {
+import { queryElement } from '$utils/queryElement';
+import { queryElements } from '$utils/queryElements';
+
+import { getRandomColor } from './getRandomColor';
+
+export const splitLines = (element: HTMLElement, timeline: GSAPTimeline, delay: string) => {
   const formatted = new SplitText(element, {
-    type: 'lines, words',
+    type: 'lines, chars',
     linesClass: 'u-overflow-hidden',
   });
 
@@ -16,4 +21,7 @@ export const splitLines = (element: Element | Element[], timeline: GSAPTimeline,
       index === 0 ? delay : '<0.2'
     );
   });
+
+  const { flicker } = element.dataset;
+  if (!flicker) return;
 };
