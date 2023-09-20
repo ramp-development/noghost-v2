@@ -22,7 +22,6 @@ export const scramble = (): void => {
     if (counter === phrases.length - 1) return;
     setTimeout(nextPhrase, 800);
     counter = (counter + 1) % phrases.length;
-    console.log(counter);
   };
 
   nextPhrase();
@@ -80,6 +79,7 @@ class TextScramble {
 
   // The animation loop, called repeatedly to update each character
   private update(): void {
+    console.log(this.frame);
     let output = '';
     let complete = 0;
 
@@ -116,5 +116,38 @@ class TextScramble {
   // Method to get a random character for scrambling
   private randomChar(): string {
     return this.chars[Math.floor(Math.random() * this.chars.length)];
+  }
+}
+
+const fps = 30;
+let now;
+let then = Date.now();
+const interval = 1000 / fps;
+let delta;
+
+function draw() {
+  requestAnimationFrame(draw);
+
+  now = Date.now();
+  delta = now - then;
+
+  if (delta > interval) {
+    // update time stuffs
+
+    // Just `then = now` is not enough.
+    // Lets say we set fps at 10 which means
+    // each frame must take 100ms
+    // Now frame executes in 16ms (60fps) so
+    // the loop iterates 7 times (16*7 = 112ms) until
+    // delta > interval === true
+    // Eventually this lowers down the FPS as
+    // 112*10 = 1120ms (NOT 1000ms).
+    // So we have to get rid of that extra 12ms
+    // by subtracting delta (112) % interval (100).
+    // Hope that makes sense.
+
+    then = now - (delta % interval);
+
+    // ... Code for Drawing the Frame ...
   }
 }

@@ -55,6 +55,7 @@
     "@finsweet/ts-utils": "^0.39.0",
     "@splidejs/splide": "^4.1.4",
     "browser-dtector": "^3.3.0",
-    "gsap": "file:gsap-bonus.tgz"
+    "gsap": "file:gsap-bonus.tgz",
+    "swiper": "^10.2.0"
   }
 }

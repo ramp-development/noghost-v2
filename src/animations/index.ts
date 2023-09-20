@@ -1,3 +1,4 @@
+import { footer } from './footer';
 import { groups } from './groups';
 import { mouse } from './mouse';
 import { nav } from './nav';
@@ -13,4 +14,5 @@ export const animations = () => {
   // scrambleOpenAI();
   // scrambleAppart();
   scramble();
+  footer();
 };
