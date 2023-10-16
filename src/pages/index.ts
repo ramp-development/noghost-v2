@@ -1,4 +1,5 @@
 import { about } from './about';
+import { work } from './work';
 
 export const pages = () => {
   console.log('pages');
@@ -7,6 +8,7 @@ export const pages = () => {
     case '/':
       break;
     case '/work':
+      work();
       break;
     case '/about':
       about();
