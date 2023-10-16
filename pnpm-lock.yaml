@@ -7,6 +7,9 @@ dependencies:
   '@splidejs/splide':
     specifier: ^4.1.4
     version: 4.1.4
+  '@studio-freight/lenis':
+    specifier: ^1.0.27
+    version: 1.0.27
   browser-dtector:
     specifier: ^3.3.0
     version: 3.3.0
@@ -617,6 +620,10 @@ packages:
 
   /@splidejs/splide@4.1.4:
     resolution: {integrity: sha512-5I30evTJcAJQXt6vJ26g2xEkG+l1nXcpEw4xpKh0/FWQ8ozmAeTbtniVtVmz2sH1Es3vgfC4SS8B2X4o5JMptA==}
+    dev: false
+
+  /@studio-freight/lenis@1.0.27:
+    resolution: {integrity: sha512-1I6EaWR9rxdFjIJtF52CtETJt9ngfY4AjawrJY5pLxCvHa/lQZ+1v2gTUntwNZkuks6E2It6YEXV6jnpnCZFjA==}
     dev: false
 
   /@types/is-ci@3.0.0:

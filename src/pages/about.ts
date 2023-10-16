@@ -1,31 +1,45 @@
-import Splide from '@splidejs/splide';
-
 import { queryElement } from '$utils/queryElement';
+import { queryElements } from '$utils/queryElements';
+import { watchElementsForClassListChanges } from '$utils/watchElementsForClassListChanges';
 
 export const about = () => {
   console.log('about');
-  const main = queryElement('.splide.cc-hwdi');
-  const text = queryElement('.splide.cc-hwdi-text');
-  if (!main || !text) return;
 
-  const mainSlider = new Splide(main, {
-    updateOnMove: true,
-    arrows: false,
-    pagination: false,
-    breakpoints: {
-      768: {
-        gap: '1rem',
-      },
-    },
+  const timeline = queryElement<HTMLDivElement>('.timeline_component');
+  const anchors = queryElements<HTMLAnchorElement>('.timeline_anchor', timeline);
+  const items = queryElements<HTMLDivElement>('.timeline_right-item', timeline);
+
+  makeAllItemsInactive();
+  const index = anchors.findIndex((anchor) => anchor.classList.contains('w--current'));
+  setActiveItem(index);
+  moveAnchors(index);
+
+  watchElementsForClassListChanges(anchors, (mutations) => {
+    mutations.forEach((mutation) => {
+      const target = mutation.target as HTMLAnchorElement;
+      if (!target.classList.contains('w--current')) return;
+
+      makeAllItemsInactive();
+      const index = anchors.indexOf(target);
+      setActiveItem(index);
+
+      moveAnchors(index);
+    });
   });
 
-  const textSlider = new Splide(text, {
-    // type: 'fade',
-    // arrows: false,
-    pagination: false,
-  });
+  function makeAllItemsInactive() {
+    items.forEach((item) => {
+      item.classList.remove('is-active');
+    });
+  }
 
-  mainSlider.sync(textSlider);
-  mainSlider.mount();
-  textSlider.mount();
+  function setActiveItem(index: number) {
+    items[index].classList.add('is-active');
+  }
+
+  function moveAnchors(index: number) {
+    anchors.forEach((anchor) => {
+      anchor.style.transform = `translateY(-${index * 100}%)`;
+    });
+  }
 };
