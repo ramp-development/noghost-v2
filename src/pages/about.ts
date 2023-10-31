@@ -11,8 +11,10 @@ export const about = () => {
 
   makeAllItemsInactive();
   const index = anchors.findIndex((anchor) => anchor.classList.contains('w--current'));
-  setActiveItem(index);
-  moveAnchors(index);
+  if (index >= 0) {
+    setActiveItem(index);
+    moveAnchors(index);
+  }
 
   watchElementsForClassListChanges(anchors, (mutations) => {
     mutations.forEach((mutation) => {
