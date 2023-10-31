@@ -1,4 +1,6 @@
 import { about } from './about';
+import { careers } from './careers';
+import { home } from './home';
 import { work } from './work';
 
 export const pages = () => {
@@ -6,6 +8,7 @@ export const pages = () => {
   const { pathname } = window.location;
   switch (pathname) {
     case '/':
+      home();
       break;
     case '/work':
       work();
@@ -13,7 +16,8 @@ export const pages = () => {
     case '/about':
       about();
       break;
-    case '/contact':
+    case '/careers':
+      careers();
       break;
   }
 };
