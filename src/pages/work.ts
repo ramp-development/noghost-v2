@@ -10,6 +10,9 @@ export const work = () => {
     const child = children.find((child) => child.dataset.tagsChild === parent.dataset.tagsParent);
     if (!child) return;
 
-    parent.appendChild(child);
+    const list = child.firstElementChild;
+    if (!list) return;
+
+    parent.appendChild(list.cloneNode(true));
   });
 };
