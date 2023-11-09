@@ -56,7 +56,9 @@
     "@splidejs/splide": "^4.1.4",
     "@studio-freight/lenis": "^1.0.27",
     "browser-dtector": "^3.3.0",
+    "canvas-confetti": "^1.9.0",
     "gsap": "file:gsap-bonus.tgz",
+    "npm": "^10.2.3",
     "swiper": "^10.2.0"
   }
 }

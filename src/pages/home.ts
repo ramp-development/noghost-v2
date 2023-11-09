@@ -2,18 +2,14 @@ import gsap from 'gsap';
 import CustomEase from 'gsap/CustomEase';
 
 export const home = () => {
-  let loaderDuration = 8;
-  let counter = {
+  const loaderDuration = 8;
+  const counter = {
     value: 0,
   };
 
   if (sessionStorage.getItem('visited') !== null) {
     $('.loader-wrapper').remove();
     return;
-    loaderDuration = 2;
-    counter = {
-      value: 75,
-    };
   }
 
   sessionStorage.setItem('visited', 'true');
@@ -31,12 +27,21 @@ export const home = () => {
     onComplete: endLoaderAnimation,
   });
 
-  tl.to(counter, {
-    value: 100,
-    onUpdate: updateLoaderText,
-    duration: loaderDuration,
-    ease: 'easeInOut',
+  tl.to('.loader_component', {
+    opacity: 1,
+    duration: 0.1,
   });
+
+  tl.to(
+    counter,
+    {
+      value: 100,
+      onUpdate: updateLoaderText,
+      duration: loaderDuration,
+      ease: 'easeInOut',
+    },
+    0
+  );
 
   tl.to(
     '.loader_progress-bar',
