@@ -8,6 +8,7 @@ export const launchConfetti = () => {
       spread: 90,
       startVelocity: 80,
       origin: { x: 0, y: 0.75 },
+      zIndex: 1000,
       disableForReducedMotion: true,
       colors: [
         '#b8ff1d',
@@ -26,6 +27,7 @@ export const launchConfetti = () => {
       spread: 90,
       startVelocity: 80,
       origin: { x: 1, y: 0.75 },
+      zIndex: 1000,
       disableForReducedMotion: true,
       colors: [
         '#b8ff1d',

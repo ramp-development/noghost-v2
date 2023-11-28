@@ -1,10 +1,12 @@
 import { banner } from './banner';
 import { celebration } from './celebration';
-import { smooth } from './smooth';
+import { contact } from './contact';
+import { scramble } from './scramble';
 
 export const animations = () => {
   console.log('animations');
-  // smooth();
   banner();
   celebration();
+  contact();
+  scramble();
 };
