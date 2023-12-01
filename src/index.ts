@@ -4,6 +4,8 @@ import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 
+import { onAllImagesLoaded } from '$utils/onAllImagesLoaded';
+
 import { animations } from './animations';
 import { pages } from './pages';
 
@@ -13,4 +15,6 @@ window.Webflow.push(() => {
 
   animations();
   pages();
+
+  onAllImagesLoaded(() => ScrollTrigger.refresh());
 });
