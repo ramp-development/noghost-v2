@@ -129,7 +129,6 @@ export const scramble = () => {
     }
   });
 
-  ScrollTrigger.refresh();
   window.addEventListener('resize', () => {
     ScrollTrigger.refresh();
   });
