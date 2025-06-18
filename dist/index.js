@@ -8672,6 +8672,7 @@
     const itemsToAnimate = items.slice(0, numberOfItemsToAnimate);
     let words = items.map((item) => item.firstChild?.textContent).filter(Boolean);
     words = shuffleArray(words);
+    const scrambleTimelines = [];
     function shuffleArray(array) {
       const arr = array.slice();
       for (let i = arr.length - 1; i > 0; i--) {
@@ -8691,33 +8692,60 @@
         const nextChild = item.children[1];
         if (!nextChild)
           return;
+        nextChild.innerHTML = "";
         nextChild.textContent = words[index] || "";
+        scrambleTimelines[index] = createScrambleAnimation(nextChild);
+        scrambleTimelines[index].pause(0);
       });
     }
-    function animateItems() {
-      const timeline3 = gsapWithCSS.timeline({
-        onComplete: () => {
-          itemsToAnimate.forEach((item, index) => {
+    function tickerLoop() {
+      let completedCount = 0;
+      const total = itemsToAnimate.length;
+      const stagger = 0.1;
+      itemsToAnimate.forEach((item, index) => {
+        const nextChild = item.children[1];
+        const scrambleTimeline = scrambleTimelines[index];
+        if (!scrambleTimeline || !nextChild) {
+          prepItems();
+          setTimeout(tickerLoop, 1e3);
+          return;
+        }
+        let slideDone = false;
+        let scrambleDone = false;
+        function checkDone() {
+          if (slideDone && scrambleDone) {
             const { children } = item;
             children[0].textContent = children[1].textContent;
-          });
-          prepItems();
-          timeline3.restart();
+            gsapWithCSS.set(children, { yPercent: 0 });
+            completedCount += 1;
+            if (completedCount === total) {
+              prepItems();
+              setTimeout(tickerLoop, 1e3);
+            }
+          }
         }
-      });
-      timeline3.to(
-        itemsToAnimate.map((item) => item.children),
-        {
+        gsapWithCSS.to(item.children, {
           yPercent: -100,
           duration: 0.5,
-          stagger: 0.05,
-          delay: 1,
-          ease: "power2.inOut"
-        }
-      );
+          delay: index * stagger,
+          ease: "power2.inOut",
+          onComplete: () => {
+            slideDone = true;
+            checkDone();
+          }
+        });
+        scrambleTimeline.eventCallback("onStart", null);
+        scrambleTimeline.eventCallback("onComplete", () => {
+          scrambleDone = true;
+          checkDone();
+        });
+        setTimeout(() => {
+          scrambleTimeline.play(0);
+        }, index * stagger * 1e3);
+      });
     }
     prepItems();
-    animateItems();
+    tickerLoop();
   };
 
   // src/utils/watchElementsForClassListChanges.ts

@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { createScrambleAnimation } from 'src/animations/scramble'; // adjust path as needed
 
 import { queryElement } from '$utils/queryElement';
 import { queryElements } from '$utils/queryElements';
@@ -15,6 +16,9 @@ export const dream = () => {
   const itemsToAnimate = items.slice(0, numberOfItemsToAnimate);
   let words = items.map((item) => item.firstChild?.textContent).filter(Boolean);
   words = shuffleArray(words);
+
+  // Store scramble timelines for each item
+  const scrambleTimelines: gsap.core.Timeline[] = [];
 
   function shuffleArray(array: any[]) {
     const arr = array.slice(); // make a copy to avoid mutating the original
@@ -33,39 +37,76 @@ export const dream = () => {
   function prepItems() {
     words = moveXItemsToEnd(words, numberOfItemsToAnimate);
     itemsToAnimate.forEach((item, index) => {
-      const nextChild = item.children[1];
+      const nextChild = item.children[1] as HTMLElement;
       if (!nextChild) return;
+
+      // Clean up any previous SplitText wrappers
+      nextChild.innerHTML = '';
       nextChild.textContent = words[index] || '';
+
+      // Create a scramble animation for the next word, paused
+      scrambleTimelines[index] = createScrambleAnimation(nextChild);
+      scrambleTimelines[index].pause(0); // Ensure it's reset and paused
     });
   }
 
-  function animateItems() {
-    const timeline = gsap.timeline({
-      onComplete: () => {
-        // After animation, update the first child and reset yPercent
-        itemsToAnimate.forEach((item, index) => {
+  // Main ticker loop with stagger
+  function tickerLoop() {
+    let completedCount = 0;
+    const total = itemsToAnimate.length;
+    const stagger = 0.1; // seconds
+
+    itemsToAnimate.forEach((item, index) => {
+      const nextChild = item.children[1] as HTMLElement;
+      const scrambleTimeline = scrambleTimelines[index];
+      if (!scrambleTimeline || !nextChild) {
+        // Defensive: prep and try again
+        prepItems();
+        setTimeout(tickerLoop, 1000);
+        return;
+      }
+
+      let slideDone = false;
+      let scrambleDone = false;
+
+      function checkDone() {
+        if (slideDone && scrambleDone) {
           const { children } = item;
           children[0].textContent = children[1].textContent;
-        });
+          gsap.set(children, { yPercent: 0 });
+          completedCount += 1;
+          if (completedCount === total) {
+            prepItems();
+            setTimeout(tickerLoop, 1000);
+          }
+        }
+      }
 
-        prepItems();
-        timeline.restart();
-      },
-    });
-
-    timeline.to(
-      itemsToAnimate.map((item) => item.children),
-      {
+      // Start both animations simultaneously, with staggered delay
+      gsap.to(item.children, {
         yPercent: -100,
         duration: 0.5,
-        stagger: 0.05,
-        delay: 1,
+        delay: index * stagger,
         ease: 'power2.inOut',
-      }
-    );
+        onComplete: () => {
+          slideDone = true;
+          checkDone();
+        },
+      });
+
+      scrambleTimeline.eventCallback('onStart', null);
+      scrambleTimeline.eventCallback('onComplete', () => {
+        scrambleDone = true;
+        checkDone();
+      });
+      // Start scramble with the same staggered delay
+      setTimeout(() => {
+        scrambleTimeline.play(0);
+      }, index * stagger * 1000);
+    });
   }
 
   // Initial prep
   prepItems();
-  animateItems();
+  tickerLoop();
 };

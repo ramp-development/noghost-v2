@@ -93,7 +93,7 @@ export const scramble = () => {
         break;
       case 'slide':
         // play the animation on slide into view
-        // get the slide the element sits within
+        // gest the slide the element sits within
         const slideDOM = element.closest('.w-slide');
         if (!slideDOM) return;
         // watch for changes to the styles set on the slide
