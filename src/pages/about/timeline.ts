@@ -2,8 +2,8 @@ import { queryElement } from '$utils/queryElement';
 import { queryElements } from '$utils/queryElements';
 import { watchElementsForClassListChanges } from '$utils/watchElementsForClassListChanges';
 
-export const about = () => {
-  console.log('about');
+export const timeline = () => {
+  console.log('timeline');
 
   const timeline = queryElement<HTMLDivElement>('.timeline_component');
   const anchors = queryElements<HTMLAnchorElement>('.timeline_anchor', timeline);
