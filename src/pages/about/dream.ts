@@ -11,7 +11,7 @@ export const dream = () => {
   const component = queryElement(`[${attr}="component"]`);
   if (!component) return;
 
-  const numberOfItemsToAnimate = 5;
+  const numberOfItemsToAnimate = 10;
   const items = queryElements(`[${attr}="item"]`);
   const itemsToAnimate = items.slice(0, numberOfItemsToAnimate);
   let words = items.map((item) => item.firstChild?.textContent).filter(Boolean);
@@ -54,7 +54,7 @@ export const dream = () => {
   function tickerLoop() {
     let completedCount = 0;
     const total = itemsToAnimate.length;
-    const stagger = 0.1; // seconds
+    const stagger = 0.05; // seconds
 
     itemsToAnimate.forEach((item, index) => {
       const nextChild = item.children[1] as HTMLElement;
@@ -85,7 +85,7 @@ export const dream = () => {
       // Start both animations simultaneously, with staggered delay
       gsap.to(item.children, {
         yPercent: -100,
-        duration: 0.5,
+        duration: 0.35,
         delay: index * stagger,
         ease: 'power2.inOut',
         onComplete: () => {
