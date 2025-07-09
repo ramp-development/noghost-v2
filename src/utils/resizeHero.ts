@@ -15,6 +15,6 @@ export const resizeHero = () => {
     if (nav) offsetHeight += nav.offsetHeight;
 
     hero.style.minHeight = `calc(100svh - ${offsetHeight}px)`;
-    hero.style.paddingBottom = `${offsetHeight}px`;
+    // hero.style.paddingBottom = `${offsetHeight}px`;
   }
 };
