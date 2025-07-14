@@ -1,4 +1,5 @@
 export const sizeBasedOnRatio = (element: HTMLElement, ratioFraction: number): void => {
+  console.log('sizeBasedOnRatio');
   const { parentElement } = element;
   if (!parentElement) return;
 

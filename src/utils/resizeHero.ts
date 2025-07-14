@@ -2,6 +2,7 @@ import { queryElement } from './queryElement';
 import { queryElements } from './queryElements';
 
 export const resizeHero = () => {
+  console.log('resizeHero');
   const attr = 'data-component';
   const banner = queryElement<HTMLDivElement>(`[${attr}="banner"]`);
   const nav = queryElement<HTMLDivElement>(`[${attr}="nav"]`);
